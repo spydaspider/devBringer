@@ -5,14 +5,19 @@ const posts = require('./routes/posts.js');
 const profile = require('./routes/profile.js');
 
 const app = express();
+app.use(express.json());
 const mongoUri = require('./config/keys.js').MONGO_URI;
 app.get('/', (req,res)=>{
     res.send("Welcome to my server");
 })
+app.use((req,res,next)=>{
+    console.log(req.path, req.body);
+    next();
+})
 //use routes
 app.use('/api/users', users);
-app.use('/api/posts/', posts);
-app.use('/api/profile/', profile);
+/* app.use('/api/posts/', posts);
+app.use('/api/profile/', profile); */
 mongoose.connect(mongoUri).then(()=>{
     console.log('MongoDb connected');
 }).catch((error)=>{
