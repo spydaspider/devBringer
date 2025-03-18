@@ -19,4 +19,17 @@ const signup = async(req,res)=>{
 
     }
 }
-module.exports = { signup };
+const login = async(req, res)=>{
+    try{
+        const { email, password } = req.body;
+        console.log(req.body.email, req.body.password);
+
+         const user = await User.login(email, password); 
+         res.status(200).json(user); 
+       }
+    catch(error)
+    {
+        res.status(200).json({error: error.message});
+    }
+}
+module.exports = { signup,login };
