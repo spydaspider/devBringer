@@ -16,8 +16,8 @@ app.use((req,res,next)=>{
 })
 //use routes
 app.use('/api/users', users);
-/* app.use('/api/posts/', posts);
-app.use('/api/profile/', profile); */
+/* app.use('/api/posts/', posts);*/
+app.use('/api/profile/', profile); 
 mongoose.connect(mongoUri).then(()=>{
     console.log('MongoDb connected');
 }).catch((error)=>{
