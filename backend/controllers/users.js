@@ -6,13 +6,14 @@ const createToken = (_id) =>{
     return jwt.sign({_id},secret, {expiresIn: '3d'});
 }
 const signup = async(req,res)=>{
-    const avatar = gravatar.url(req.body.email, {
+    const { email } = req.body;
+    const avatar = gravatar.url(email, {
         s: '200',
         r: 'pg',
         d: 'mm'
     });
     try{
-         const user = await User.signup({username: req.body.username, email: req.body.email, avatar, password: req.body.password});
+         const user = await User.signup({username: req.body.username, email, avatar, password: req.body.password});
          const token = createToken(user.id);
          res.status(200).json({email, token});
     }
@@ -34,4 +35,16 @@ const login = async(req, res)=>{
         res.status(200).json({error: error.message});
     }
 }
-module.exports = { signup,login };
+const getAllUsers = async(req,res)=>{
+    try{
+        const users = await User.find().sort({createdAt:-1});
+        console.log(users);
+
+        res.status(200).json(users);
+
+    }
+    catch(error){
+        return res.status(404).json({error: error.message});
+    }
+}
+module.exports = { signup,login,getAllUsers };

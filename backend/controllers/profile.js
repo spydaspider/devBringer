@@ -88,7 +88,56 @@ const createAndUpdateProfile = async(req,res) =>{
       
 
 }
-//create a profile
+//get profile by handle
+const getProfileByHandle = async(req,res) =>{
+    try{
+        const { handle } = req.params;
+     const profile = await Profile.findOne({handle})
+     .populate('user',['name','avatar'])
+      if(!profile){
+       return res.status(404).json({error: "There is no profile"});
+      }
+      res.status(200).json(profile);
+
+    }
+    catch(error)
+    {
+       return res.status(400).json({error: "No profile"});
+    }
+
+}
+//get profile 
+const getProfileByUser = async(req,res) =>{
+    try{
+        const { user_id } = req.params;
+        
+        console.log(user_id);
+     const profile = await Profile.findOne({user:user_id})
+     .populate('user',['name','avatar'])
+      if(!profile){
+        return res.status(404).json({error: 'No profile'});
+      }
+      res.status(200).json(profile);
+
+    }
+    catch(error)
+    {
+        
+       return res.status(500).json("No profile");
+    }
+
+}
+//get all profiles
+const getAllProfiles = async(req,res) =>{
+    
+    try{
+          const profiles = await Profile.find().populate('user',['name','avatar']);
+          res.status(200).json(profiles);
+    }
+    catch(error){
+        return res.status(404).json({error: 'No profiles'});
+    }
+}
 module.exports = {
-    getUserProfile, createAndUpdateProfile
+    getUserProfile, createAndUpdateProfile, getProfileByHandle, getProfileByUser, getAllProfiles
 }
